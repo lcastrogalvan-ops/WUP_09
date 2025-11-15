@@ -79,12 +79,40 @@ as.data.frame(summary.perch$outmat)
 library(car)
 subsets(Perchmodelautomate,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
 ```
-After looking at the code, i found that the best single element regression model (Height), the best two element regression models ( Height and wqidth) and I was also able to get the best 3,4, and 5th element regression models.I judged the regression models by checking the adjusted R square values. 
+After looking at the code, i found that the best single element regression model (Height), the best two element regression models ( Height and width) and I was also able to get the best 3,4, and 5th element regression models.I judged the regression models by checking the adjusted R square values. 
 ## Pike
+
+```{r}
+Pike <- filter(fish, Species == "Pike")
+Pike <- select(Pike, -Species) 
+```
+
 
 ### Best Models
 
+```{r}
+Pikemodel1 <- lm(Weight~ .,data=Pike)
+summary.lm(Pikemodel1)
+```
+
 ### Best Two regressor model
+
+```{r}
+library(leaps)
+Pikemodelautomate <-
+    regsubsets(Weight ~ .,
+               data = Pike,
+               nbest = 1,       # 1 best model for each number of predictors
+               nvmax = NULL,    # NULL for no limit on number of variables
+               force.in = NULL, force.out = NULL,
+               method = "exhaustive")
+
+summary.pike <- summary(Pikemodelautomate)
+as.data.frame(summary.pike$outmat)
+library(car)
+subsets(Pikemodelautomate,statistic="adjr2",legend="bottomright",main="Adjusted R^2")
+```
+By running the pike code I was able to discover that the best two regressor models were L1 and L3 but the best regressor models were L 1,2, and 3 along with height and width which is the comnplete model.All models were judged based on adjusted R square values. 
 
 ## Roach
 
